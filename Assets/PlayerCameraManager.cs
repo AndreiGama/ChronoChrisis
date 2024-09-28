@@ -1,18 +1,23 @@
 using UnityEngine;
+using static UnityEngine.InputSystem.InputAction;
 
 public class PlayerCameraManager : MonoBehaviour
 {
     [SerializeField] float cameraSensitivity = 100f;
     [SerializeField] Transform playerBody;
     float xRotation;
-	private void Start() {
+    static Vector2 mouseInput;
+    private void Start() {
 		Cursor.lockState = CursorLockMode.Locked;
 	}
+    public static void LookInput(CallbackContext context) {
+        mouseInput = context.ReadValue<Vector2>();
+    }
 	// Update is called once per frame
 	void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * cameraSensitivity * Time.deltaTime;
-		float mouseY = Input.GetAxis("Mouse Y") * cameraSensitivity * Time.deltaTime;
+        float mouseX = mouseInput.x * cameraSensitivity * Time.deltaTime;
+		float mouseY = mouseInput.y * cameraSensitivity * Time.deltaTime;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90, 90);

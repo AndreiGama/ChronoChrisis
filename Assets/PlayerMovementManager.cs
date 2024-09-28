@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.InputSystem.InputAction;
 
 public class PlayerMovementManager : MonoBehaviour {
 	CharacterController charController;
@@ -11,18 +12,20 @@ public class PlayerMovementManager : MonoBehaviour {
 
 	Vector3 velocity;
 	bool isGrounded;
+	[SerializeField] static Vector2 playerInput;
 	private void Awake() {
 		charController = GetComponent<CharacterController>();
 	}
-
+	public static void MoveInput(CallbackContext context) {
+		playerInput = context.ReadValue<Vector2>();
+		playerInput.Normalize();
+	}
 	private void Update() {
 		isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 		if (isGrounded && velocity.y < 0) {
 			velocity.y = -2f;
 		}
-		float x = Input.GetAxis("Horizontal");
-		float z = Input.GetAxis("Vertical");
-		Vector3 move = transform.right * x + transform.forward * z;
+		Vector3 move = transform.right * playerInput.x + transform.forward * playerInput.y;
 		charController.Move(move * moveSpeed * Time.deltaTime);
 
 		velocity.y += gravity * Time.deltaTime;

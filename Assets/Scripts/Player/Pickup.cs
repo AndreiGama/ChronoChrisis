@@ -5,7 +5,6 @@ public class Pickup : MonoBehaviour, IInteract {
 	[SerializeField] GameObject prefabPickupModel;
 	
 	public void Interact(PlayerFireManager fireManager) {
-		Debug.Log(fireManager);
 		fireManager.equippedItemOBJ = prefabPickup;
 		Instantiate(prefabPickupModel, fireManager.equipmentSlotPosition);
 		fireManager.itemEquipped = true;

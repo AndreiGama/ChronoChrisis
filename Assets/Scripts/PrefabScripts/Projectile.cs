@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Projectile : MonoBehaviour {
 	Rigidbody rb;
 	[SerializeField] float throwForce;
 	[SerializeField] float throwUpForce;
 	public Vector3 forceDirection;
+	[SerializeField] UnityEvent collisionEvent;
 	private void Awake() {
 		rb = GetComponent<Rigidbody>();
 	}
@@ -16,7 +18,10 @@ public class Projectile : MonoBehaviour {
 	//	rb.velocity += transform.forward * projectileSpeed * Time.deltaTime;
 	//}
 	private void OnCollisionEnter(Collision collision) {
-		Debug.Log(collision.transform.name);
+		collisionEvent.Invoke();
+	}
+
+	public void SelfDestroy() {
 		Destroy(gameObject);
 	}
 }

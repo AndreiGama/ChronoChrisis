@@ -6,12 +6,19 @@ public class PlayerCameraManager : MonoBehaviour
     [SerializeField] float cameraSensitivity = 100f;
     [SerializeField] Transform playerBody;
     float xRotation;
-    static Vector2 mouseInput;
+    public Vector2 mouseInput;
     private void Start() {
 		Cursor.lockState = CursorLockMode.Locked;
 	}
-    public static void LookInput(CallbackContext context) {
+    public void LookInput(CallbackContext context) {
         mouseInput = context.ReadValue<Vector2>();
+    }
+    public bool IsLooking() {
+        if(mouseInput != Vector2.zero) {
+            return true;
+        } else {
+            return false;
+        }
     }
 	// Update is called once per frame
 	void Update()

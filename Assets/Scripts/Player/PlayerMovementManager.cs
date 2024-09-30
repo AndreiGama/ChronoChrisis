@@ -4,7 +4,7 @@ using static UnityEngine.InputSystem.InputAction;
 public class PlayerMovementManager : MonoBehaviour {
 	CharacterController charController;
 	[SerializeField] float gravity = -9.81f;
-    [SerializeField] float moveSpeed;
+	public float moveSpeed;
 
 	[SerializeField] Transform groundCheck;
 	[SerializeField] float groundDistance;
@@ -12,11 +12,11 @@ public class PlayerMovementManager : MonoBehaviour {
 
 	Vector3 velocity;
 	bool isGrounded;
-	[SerializeField] static Vector2 playerInput;
+	public  Vector2 playerInput;
 	private void Awake() {
 		charController = GetComponent<CharacterController>();
 	}
-	public static void MoveInput(CallbackContext context) {
+	public void MoveInput(CallbackContext context) {
 		playerInput = context.ReadValue<Vector2>();
 		playerInput.Normalize();
 	}
@@ -30,5 +30,18 @@ public class PlayerMovementManager : MonoBehaviour {
 
 		velocity.y += gravity * Time.deltaTime;
 		charController.Move(velocity * Time.deltaTime);
+	}
+
+	public Vector3 GetPlayerMovement() {
+		Vector3 move = transform.right * playerInput.x + transform.forward * playerInput.y;
+		Vector3 velocity = move * moveSpeed;
+
+		return velocity;
+	}
+
+	public Vector3 PredictedMovement(float PredictionTime) {
+		Vector3 predictedPosition = transform.position + GetPlayerMovement() * PredictionTime;
+
+		return predictedPosition;
 	}
 }
